@@ -19,8 +19,6 @@ jobs:
       matrix:
         name:
           - linux
-          - macos-arm64
-          - macos-x86_64
           - windows
         include:
           - name: linux
@@ -34,19 +32,6 @@ jobs:
             os: windows-latest
             archive_name: age-plugin-yubikey.zip
             asset_suffix: x86_64-windows.zip
-
-          - name: macos-arm64
-            os: macos-latest
-            target: aarch64-apple-darwin
-            build_flags: --target aarch64-apple-darwin
-            archive_name: age-plugin-yubikey.tar.gz
-            asset_suffix: arm64-darwin.tar.gz
-
-          - name: macos-x86_64
-            os: macos-latest
-            archive_name: age-plugin-yubikey.tar.gz
-            asset_suffix: x86_64-darwin.tar.gz
-
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -83,6 +68,15 @@ jobs:
           cd release/
           7z.exe a ../${{ matrix.archive_name }} age-plugin-yubikey/
         shell: bash
+        if: matrix.name == 'windows'
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build                # Optional: Default name is 'artifact'
+          path: release/age-plugin-yubikey   # Required: Path to file or directory
+          retention-days: 2                  # Optional: 1 to 90 days (Defaults to 90)
+          compression-level: 6               # Optional: 0 (none) to 9 (max)
         if: matrix.name == 'windows'
 
       - name: Upload archive to release

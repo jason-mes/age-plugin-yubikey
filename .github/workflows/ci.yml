@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        name: [linux, windows, macos]
+        name: [linux, windows]
         include:
           - name: linux
             os: ubuntu-latest
@@ -20,9 +20,6 @@ jobs:
 
           - name: windows
             os: windows-latest
-
-          - name: macos
-            os: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +40,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        name: [linux, windows, macos]
+        name: [linux, windows]
         include:
           - name: linux
             os: ubuntu-latest
@@ -52,9 +49,6 @@ jobs:
 
           - name: windows
             os: windows-latest
-
-          - name: macos
-            os: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -91,11 +85,6 @@ jobs:
           --engine llvm
           --timeout 180
           --out xml
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4.5.0
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   doc-links:
     name: Intra-doc links
